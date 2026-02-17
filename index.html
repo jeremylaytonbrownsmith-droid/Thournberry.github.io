@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thornberry — Platform</title>
+<title>Thornberry — Real Estate Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,8 +12,8 @@
     --white: #f8f7f4;
     --black: #0a0a0a;
     --dark: #111113;
-    --accent: #c5a74e;
-    --teal: #1a1a1e;
+    --accent: #c9a96e;
+    --gray: #888;
     --font-main: 'Outfit', sans-serif;
     --font-display: 'Playfair Display', Georgia, serif;
     --font-mono: 'Space Mono', monospace;
@@ -28,11 +28,336 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── NAV ── */
-  nav {
+  /* ═══════════════════════════════════════
+     PAGE 1: SPLIT HERO
+     ═══════════════════════════════════════ */
+  #page-split {
+    position: relative;
+    z-index: 10;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #page-split.hide {
+    opacity: 0;
+    transform: scale(0.97);
+    pointer-events: none;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+  }
+
+  /* NAV for split */
+  .nav-split {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 200;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    mix-blend-mode: difference;
+    transition: opacity 0.4s;
+  }
+  .nav-split.hide { opacity: 0; pointer-events: none; }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    letter-spacing: 0.45em;
+    font-weight: 700;
+    color: var(--white);
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* SPLIT LAYOUT */
+  .hero-split {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+    width: 100%;
+  }
+  .hero-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 40px;
+    cursor: pointer;
+    transition: flex 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .hero-split:hover .hero-panel { flex: 0.92; }
+  .hero-split .hero-panel:hover { flex: 1.16; }
+
+  /* Left — Buyers */
+  .panel-buyers {
+    background: linear-gradient(180deg, rgba(20,30,50,0.25) 0%, rgba(10,10,10,0.5) 100%),
+                url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80') center/cover no-repeat;
+  }
+  .panel-buyers::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  /* Right — Brokerages */
+  .panel-brokerages {
+    background: var(--dark);
+    position: relative;
+  }
+  .panel-brokerages::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 600px at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 70%);
+    z-index: 1;
+  }
+
+  /* Rings (split page) */
+  .rings-split {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px; height: 520px;
+    z-index: 1;
+    pointer-events: none;
+    animation: ringsRotateSlow 30s linear infinite;
+  }
+  @keyframes ringsRotateSlow {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .ring-s {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: ringPulseS 6s ease-in-out infinite;
+  }
+  .ring-s:nth-child(1) { width: 240px; height: 240px; animation-delay: 0s; }
+  .ring-s:nth-child(2) { width: 360px; height: 360px; animation-delay: 0.8s; animation-name: ringDriftS; animation-duration: 8s; }
+  .ring-s:nth-child(3) { width: 480px; height: 480px; animation-delay: 1.6s; }
+  .ring-s:nth-child(4) { width: 600px; height: 600px; animation-delay: 2.4s; animation-name: ringDriftS; animation-duration: 10s; }
+  @keyframes ringPulseS {
+    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  }
+  @keyframes ringDriftS {
+    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    33% { opacity: 0.8; transform: translate(-48%, -52%) scale(1.04); }
+    66% { opacity: 1; transform: translate(-52%, -48%) scale(1.02); }
+  }
+
+  /* Service labels */
+  .service-label {
+    position: absolute;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    z-index: 2;
+    font-weight: 500;
+  }
+  .sl-1 { top: 22%; right: 12%; }
+  .sl-2 { top: 38%; left: 8%; }
+  .sl-3 { bottom: 30%; right: 8%; }
+  .sl-4 { bottom: 18%; left: 14%; }
+  .sl-5 { bottom: 10%; right: 16%; }
+
+  /* Small phone on split */
+  .phone-mini {
+    position: relative;
+    z-index: 3;
+    width: 180px;
+    height: 360px;
+    background: linear-gradient(145deg, #1a1a1c 0%, #0e0e10 100%);
+    border-radius: 28px;
+    border: 2px solid rgba(255,255,255,0.1);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+    transform: rotate(-6deg) translateY(-20px);
+    overflow: hidden;
+    opacity: 0;
+    animation: phoneFadeIn 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  }
+  @keyframes phoneFadeIn {
+    from { opacity: 0; transform: rotate(-6deg) translateY(10px) scale(0.92); }
+    to { opacity: 1; transform: rotate(-6deg) translateY(-20px) scale(1); }
+  }
+  .phone-mini::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 18px;
+    background: #000; border-radius: 10px; z-index: 5;
+  }
+  .phone-mini-screen {
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    border-radius: 24px;
+    background: linear-gradient(180deg, #1c2333 0%, #0f1520 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 12px 12px;
+    gap: 8px;
+  }
+  .phone-mini-logo {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .pm-card {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .pm-card-1 { height: 80px; background: linear-gradient(135deg, rgba(201,169,110,0.15), rgba(201,169,110,0.05)); border: 1px solid rgba(201,169,110,0.1); }
+  .pm-card-2 { height: 50px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
+  .pm-card-3 { height: 50px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+
+  /* Panel content */
+  .panel-content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .panel-heading {
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .panel-heading em { font-style: normal; color: var(--accent); }
+  .panel-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  /* CTAs */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    font-family: var(--font-main);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-decoration: none;
+  }
+  .cta-light { background: var(--white); color: var(--black); }
+  .cta-light:hover {
+    background: var(--accent); color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(201,169,110,0.25);
+  }
+  .cta-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.25); }
+  .cta-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .cta-arrow { transition: transform 0.3s; }
+  .cta:hover .cta-arrow { transform: translateX(4px); }
+
+  /* Divider */
+  .hero-divider {
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 70%, transparent);
+    z-index: 50;
+    pointer-events: none;
+  }
+
+  /* Bottom taglines */
+  .panel-tagline {
+    position: absolute;
+    bottom: 48px; left: 0; right: 0;
+    text-align: center; z-index: 5;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* Entrance animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-fade-up { opacity: 0; animation: fadeUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+  .anim-delay-1 { animation-delay: 0.15s; }
+  .anim-delay-2 { animation-delay: 0.3s; }
+  .anim-delay-3 { animation-delay: 0.5s; }
+  .anim-delay-4 { animation-delay: 0.7s; }
+  .anim-delay-5 { animation-delay: 0.9s; }
+
+
+  /* ═══════════════════════════════════════
+     PAGE 2: PLATFORM
+     ═══════════════════════════════════════ */
+  #page-platform {
+    opacity: 0;
+    transform: translateY(30px);
+    pointer-events: none;
+    transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+    min-height: 100vh;
+  }
+  #page-platform.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* NAV for platform */
+  .nav-platform {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,59 +365,31 @@
     background: rgba(10,10,10,0.85);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255,255,255,0.06);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s 0.4s;
   }
-  .logo {
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    letter-spacing: 0.45em;
-    font-weight: 700;
-    color: var(--white);
-    text-transform: uppercase;
-    text-decoration: none;
-  }
+  .nav-platform.show { opacity: 1; pointer-events: auto; }
   .nav-center {
-    display: flex;
-    gap: 36px;
-    list-style: none;
+    display: flex; gap: 36px; list-style: none;
   }
   .nav-center a {
-    color: var(--white);
-    text-decoration: none;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    font-weight: 500;
-    opacity: 0.6;
-    transition: opacity 0.3s;
+    color: var(--white); text-decoration: none;
+    font-size: 0.82rem; letter-spacing: 0.08em;
+    font-weight: 500; opacity: 0.6; transition: opacity 0.3s;
   }
   .nav-center a:hover { opacity: 1; }
   .nav-cta {
     padding: 10px 28px;
     border: 1.5px solid rgba(255,255,255,0.25);
-    color: var(--white);
-    text-decoration: none;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    transition: all 0.3s;
+    color: var(--white); text-decoration: none;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.04em; transition: all 0.3s;
   }
-  .nav-cta:hover {
-    background: var(--white);
-    color: var(--black);
-    border-color: var(--white);
-  }
-  .nav-toggle {
-    display: none;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--white);
-    opacity: 0.7;
-    cursor: pointer;
-  }
+  .nav-cta:hover { background: var(--white); color: var(--black); border-color: var(--white); }
 
-  /* ── HERO: PHONE + RINGS ── */
-  .hero {
+  /* HERO SECTION */
+  .platform-hero {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -108,22 +405,20 @@
   /* Back link */
   .back-link {
     position: absolute;
-    top: 100px;
-    left: 48px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    top: 100px; left: 48px;
+    display: flex; align-items: center; gap: 8px;
     color: rgba(255,255,255,0.5);
     text-decoration: none;
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    transition: color 0.3s;
-    z-index: 10;
+    font-size: 0.78rem; letter-spacing: 0.06em;
+    transition: color 0.3s; z-index: 10;
+    cursor: pointer;
+    background: none; border: none;
+    font-family: var(--font-main);
   }
   .back-link:hover { color: var(--white); }
   .back-link svg { width: 16px; height: 16px; }
 
-  /* Rings */
+  /* Rings (platform hero) */
   .hero-rings {
     position: absolute;
     top: 50%; left: 50%;
@@ -142,165 +437,102 @@
     border-radius: 50%;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    animation: heroRingPulse 7s ease-in-out infinite;
   }
-  .hero-ring:nth-child(1) { width: 320px; height: 320px; animation-delay: 0s; }
-  .hero-ring:nth-child(2) { width: 480px; height: 480px; animation-delay: 1s; }
-  .hero-ring:nth-child(3) { width: 640px; height: 640px; animation-delay: 2s; }
-  .hero-ring:nth-child(4) { width: 800px; height: 800px; animation-delay: 3s; }
+  .hero-ring:nth-child(1) { width: 320px; height: 320px; animation: heroRingPulse 7s ease-in-out infinite 0s; }
+  .hero-ring:nth-child(2) { width: 480px; height: 480px; animation: heroRingDrift 9s ease-in-out infinite 1s; }
+  .hero-ring:nth-child(3) { width: 640px; height: 640px; animation: heroRingPulse 7s ease-in-out infinite 2s; }
+  .hero-ring:nth-child(4) { width: 800px; height: 800px; animation: heroRingDrift 11s ease-in-out infinite 3s; }
   @keyframes heroRingPulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.04); }
+  }
+  @keyframes heroRingDrift {
+    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    33% { opacity: 0.7; transform: translate(-48%, -52%) scale(1.03) rotate(3deg); }
+    66% { opacity: 0.9; transform: translate(-52%, -49%) scale(1.01) rotate(-2deg); }
   }
 
-  /* Floating labels around hero */
+  /* Floating labels */
   .hero-label {
     position: absolute;
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.25);
-    font-weight: 500;
-    z-index: 2;
+    font-weight: 500; z-index: 2;
   }
   .hl-1 { top: 18%; left: 38%; }
   .hl-2 { top: 32%; right: 14%; }
   .hl-3 { bottom: 28%; left: 10%; }
   .hl-4 { bottom: 14%; right: 18%; }
 
-  /* Phone */
+  /* Big phone */
   .hero-phone {
-    position: relative;
-    z-index: 5;
-    width: 240px;
-    height: 480px;
-    background: linear-gradient(145deg, #1a1a1c 0%, #0e0e10 100%);
+    position: relative; z-index: 5;
+    width: 240px; height: 480px;
+    background: linear-gradient(145deg, #1a1a1c, #0e0e10);
     border-radius: 36px;
     border: 2.5px solid rgba(255,255,255,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     box-shadow: 0 60px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-    overflow: hidden;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: phoneIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
-  }
-  @keyframes phoneIn {
-    from { opacity: 0; transform: translateY(40px) scale(0.94); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    overflow: hidden; margin-bottom: 32px;
   }
   .hero-phone::before {
     content: '';
-    position: absolute;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 22px;
-    background: #000;
-    border-radius: 12px;
-    z-index: 10;
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 22px;
+    background: #000; border-radius: 12px; z-index: 10;
   }
   .phone-inner {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
+    width: calc(100% - 10px); height: calc(100% - 10px);
     border-radius: 32px;
-    background: linear-gradient(180deg, #1c2333 0%, #0f1520 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 48px 16px 16px;
-    gap: 10px;
+    background: linear-gradient(180deg, #1c2333, #0f1520);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 48px 16px 16px; gap: 10px;
   }
   .phone-brand {
     font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    color: var(--accent);
-    margin-bottom: 8px;
-    text-transform: uppercase;
+    font-size: 0.6rem; letter-spacing: 0.4em;
+    color: var(--accent); margin-bottom: 8px; text-transform: uppercase;
   }
-  .phone-row {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-  }
+  .phone-row { display: flex; gap: 8px; width: 100%; }
   .phone-tile {
-    flex: 1;
-    height: 60px;
-    border-radius: 10px;
+    flex: 1; height: 60px; border-radius: 10px;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
   }
-  .phone-tile-icon {
-    width: 18px; height: 18px;
-    border-radius: 4px;
-    background: rgba(197,167,78,0.2);
-  }
-  .phone-tile-text {
-    font-size: 0.4rem;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.05em;
-  }
+  .phone-tile-icon { width: 18px; height: 18px; border-radius: 4px; background: rgba(197,167,78,0.2); }
+  .phone-tile-text { font-size: 0.4rem; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; }
   .phone-card-lg {
-    width: 100%;
-    height: 90px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(197,167,78,0.12) 0%, rgba(197,167,78,0.04) 100%);
+    width: 100%; height: 90px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(197,167,78,0.12), rgba(197,167,78,0.04));
     border: 1px solid rgba(197,167,78,0.1);
   }
   .phone-card-sm {
-    width: 100%;
-    height: 50px;
-    border-radius: 10px;
+    width: 100%; height: 50px; border-radius: 10px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.05);
   }
   .phone-nav {
-    margin-top: auto;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
+    margin-top: auto; width: 100%;
+    display: flex; justify-content: space-around;
     padding: 10px 0 4px;
     border-top: 1px solid rgba(255,255,255,0.06);
   }
-  .phone-nav-dot {
-    width: 20px; height: 20px;
-    border-radius: 6px;
-    background: rgba(255,255,255,0.06);
-  }
+  .phone-nav-dot { width: 20px; height: 20px; border-radius: 6px; background: rgba(255,255,255,0.06); }
   .phone-nav-dot.active { background: rgba(197,167,78,0.3); }
 
-  /* Hero text */
-  .hero-text {
-    position: relative;
-    z-index: 5;
-  }
-  .hero-heading {
+  .hero-heading-p {
     font-size: clamp(2.6rem, 5vw, 4rem);
-    font-weight: 700;
-    line-height: 1.1;
+    font-weight: 700; line-height: 1.1;
     letter-spacing: -0.02em;
-    margin-bottom: 6px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease 0.5s forwards;
+    position: relative; z-index: 5;
   }
-  .hero-heading em {
-    font-style: normal;
-    color: var(--accent);
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .hero-heading-p em { font-style: normal; color: var(--accent); }
 
-  /* ── SOLUTIONS SECTION ── */
+  /* ── SOLUTIONS ── */
   .solutions {
     padding: 100px 48px 120px;
     text-align: center;
@@ -310,158 +542,122 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 3.5vw, 3rem);
     font-weight: 500;
-    letter-spacing: -0.01em;
     margin-bottom: 64px;
-    color: var(--white);
   }
 
-  /* Circle grid */
   .circles-grid {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
     gap: 48px;
     max-width: 1200px;
     margin: 0 auto;
   }
 
-  /* Individual circle */
   .solution-circle {
     position: relative;
-    width: 260px;
-    height: 260px;
+    width: 260px; height: 260px;
     border-radius: 50%;
     background: var(--dark);
     border: 1px solid rgba(255,255,255,0.12);
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
     overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease, border-color 0.4s ease;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s, border-color 0.4s;
     text-decoration: none;
   }
   .solution-circle:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.4);
     border-color: rgba(255,255,255,0.25);
   }
-
-  /* Gold inset ring */
   .solution-circle::before {
     content: '';
     position: absolute;
     top: 12px; left: 12px; right: 12px; bottom: 12px;
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.06);
-    pointer-events: none;
-    z-index: 2;
+    pointer-events: none; z-index: 2;
     transition: border-color 0.4s;
   }
   .solution-circle:hover::before { border-color: rgba(255,255,255,0.12); }
-
-  /* Subtle overlay on hover */
   .solution-circle::after {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     border-radius: 50%;
     background: rgba(0,0,0,0);
-    transition: background 0.4s;
-    z-index: 1;
+    transition: background 0.4s; z-index: 1;
   }
-  .solution-circle:hover::after {
-    background: rgba(255,255,255,0.03);
-  }
+  .solution-circle:hover::after { background: rgba(255,255,255,0.03); }
 
-  /* Default state */
   .circle-default {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 30px;
-    opacity: 1;
-    transition: opacity 0.4s ease;
-    z-index: 3;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 30px;
+    opacity: 1; transition: opacity 0.4s; z-index: 3;
   }
   .circle-default h3 {
     font-family: var(--font-display);
-    font-size: 1.55rem;
-    font-weight: 500;
-    color: var(--white);
-    line-height: 1.25;
-    letter-spacing: 0.02em;
+    font-size: 1.55rem; font-weight: 500;
+    color: var(--white); line-height: 1.25;
   }
-
-  /* Hover state */
   .circle-hover-content {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 36px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 3;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 36px;
+    opacity: 0; transition: opacity 0.4s; z-index: 3;
   }
   .circle-hover-content p {
-    font-size: 0.92rem;
-    font-weight: 400;
-    color: var(--white);
-    line-height: 1.5;
-    margin-bottom: 16px;
-    letter-spacing: 0.01em;
+    font-size: 0.92rem; font-weight: 400;
+    color: var(--white); line-height: 1.5; margin-bottom: 16px;
   }
   .circle-hover-content .circle-arrow {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; font-weight: 600;
     color: rgba(255,255,255,0.7);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0.06em; text-transform: uppercase;
   }
+  .key-icon { width: 50px; height: 30px; margin-bottom: 12px; }
 
-  /* Key icon */
-  .key-icon {
-    width: 50px;
-    height: 30px;
-    margin-bottom: 12px;
-  }
-
-  /* Swap on hover */
   .solution-circle:hover .circle-default { opacity: 0; }
   .solution-circle:hover .circle-hover-content { opacity: 1; }
 
-  /* ── FOOTER ── */
+  /* Footer */
   footer {
-    padding: 48px;
-    text-align: center;
+    padding: 48px; text-align: center;
     border-top: 1px solid rgba(255,255,255,0.06);
     color: rgba(255,255,255,0.3);
     font-size: 0.78rem;
-    letter-spacing: 0.04em;
   }
-  footer a {
-    color: var(--accent);
-    text-decoration: none;
-  }
+  footer a { color: var(--accent); text-decoration: none; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    nav { padding: 20px 24px; }
-    .nav-center { display: none; }
-    .nav-cta { display: none; }
-    .nav-toggle { display: block; }
+    .nav-split { padding: 20px 24px; }
+    .nav-split .nav-links { display: none; }
+    .nav-platform { padding: 20px 24px; }
+    .nav-platform .nav-center { display: none; }
+    .nav-platform .nav-cta { display: none; }
+    .hero-split { flex-direction: row; }
+    .hero-panel { min-height: 100vh; min-width: 0; }
+    .hero-split:hover .hero-panel { flex: 1; }
+    .hero-split .hero-panel:hover { flex: 1; }
+    .panel-heading { font-size: clamp(1.4rem, 3.5vw, 2.4rem); }
+    .panel-sub { font-size: 0.8rem; }
+    .cta { padding: 12px 24px; font-size: 0.78rem; }
+    .rings-split { width: 280px; height: 280px; }
+    .ring-s:nth-child(1) { width: 140px; height: 140px; }
+    .ring-s:nth-child(2) { width: 200px; height: 200px; }
+    .ring-s:nth-child(3) { width: 260px; height: 260px; }
+    .ring-s:nth-child(4) { width: 320px; height: 320px; }
+    .service-label { display: none; }
+    .phone-mini { width: 120px; height: 240px; border-radius: 20px; }
+    .phone-mini-screen { border-radius: 16px; }
+    .phone-mini::before { width: 40px; height: 12px; top: 8px; }
+    .panel-tagline { font-size: 0.8rem; bottom: 28px; }
+    .panel-eyebrow { font-size: 0.6rem; }
     .solutions { padding: 80px 24px 100px; }
     .circles-grid { gap: 32px; }
     .solution-circle { width: 220px; height: 220px; }
@@ -471,225 +667,201 @@
     .back-link { left: 24px; }
     .hero-label { display: none; }
   }
-  @media (max-width: 560px) {
-    .solution-circle { width: 260px; height: 260px; }
-    .circles-grid { gap: 28px; }
-  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="logo">Thornberry</a>
-  <ul class="nav-center">
-    <li><a href="#">Platform</a></li>
-    <li><a href="#">Real Estate</a></li>
-    <li><a href="#">Resources</a></li>
-    <li><a href="#">About</a></li>
+<!-- ══════════════ NAV: SPLIT ══════════════ -->
+<nav class="nav-split" id="navSplit">
+  <span class="logo" onclick="goBack()">Thornberry</span>
+  <ul class="nav-links">
+    <li><a href="#">Property Management</a></li>
+    <li><a href="#">Home Services</a></li>
+    <li><a href="#">MLS</a></li>
   </ul>
-  <a href="#" class="nav-cta">Get Started</a>
-  <span class="nav-toggle">Menu</span>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <a href="#" class="back-link">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-    For Buyers / Sellers
-  </a>
+<!-- ══════════════ NAV: PLATFORM ══════════════ -->
+<nav class="nav-platform" id="navPlatform">
+  <span class="logo" onclick="goBack()">Thornberry</span>
+  <ul class="nav-center">
+    <li><a href="#">Property Management</a></li>
+    <li><a href="#">Home Services</a></li>
+    <li><a href="#">MLS</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Get Started</a>
+</nav>
 
-  <div class="hero-rings">
-    <div class="hero-ring"></div>
-    <div class="hero-ring"></div>
-    <div class="hero-ring"></div>
-    <div class="hero-ring"></div>
-  </div>
 
-  <span class="hero-label hl-1">Mortgage</span>
-  <span class="hero-label hl-2">Title & Escrow</span>
-  <span class="hero-label hl-3">Property Management</span>
-  <span class="hero-label hl-4">Real Estate Platform</span>
+<!-- ═══════════════════════════════════════
+     PAGE 1: SPLIT HERO
+     ═══════════════════════════════════════ -->
+<div id="page-split">
+  <section class="hero-split">
 
-  <!-- Phone mockup -->
-  <div class="hero-phone">
-    <div class="phone-inner">
-      <div class="phone-brand">Thornberry</div>
-      <div class="phone-row">
-        <div class="phone-tile">
-          <div class="phone-tile-icon"></div>
-          <span class="phone-tile-text">News</span>
-        </div>
-        <div class="phone-tile">
-          <div class="phone-tile-icon"></div>
-          <span class="phone-tile-text">Our Place</span>
+    <!-- Left: Buyers -->
+    <div class="hero-panel panel-buyers">
+      <div class="panel-content">
+        <span class="panel-eyebrow anim-fade-up anim-delay-1">For Homebuyers</span>
+        <h1 class="panel-heading anim-fade-up anim-delay-2">A place for<br><em>buyers</em></h1>
+        <p class="panel-sub anim-fade-up anim-delay-3">Find your next home with confidence.</p>
+        <a href="#" class="cta cta-light anim-fade-up anim-delay-4">
+          Let's Get You Home
+          <span class="cta-arrow">→</span>
+        </a>
+      </div>
+      <div class="panel-tagline anim-fade-up anim-delay-5">Everything for your home.</div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <!-- Right: Brokerages -->
+    <div class="hero-panel panel-brokerages" id="brokeragesPanel" onclick="goToPlatform()">
+      <div class="rings-split">
+        <div class="ring-s"></div>
+        <div class="ring-s"></div>
+        <div class="ring-s"></div>
+        <div class="ring-s"></div>
+      </div>
+
+      <span class="service-label sl-1">Property Management</span>
+      <span class="service-label sl-2">Home Services</span>
+      <span class="service-label sl-3">MLS</span>
+
+      <div class="phone-mini">
+        <div class="phone-mini-screen">
+          <div class="phone-mini-logo">THORNBERRY</div>
+          <div class="pm-card pm-card-1"></div>
+          <div class="pm-card pm-card-2"></div>
+          <div class="pm-card pm-card-3"></div>
         </div>
       </div>
-      <div class="phone-row">
-        <div class="phone-tile">
-          <div class="phone-tile-icon"></div>
-          <span class="phone-tile-text">Academy</span>
-        </div>
-        <div class="phone-tile">
-          <div class="phone-tile-icon"></div>
-          <span class="phone-tile-text">Store</span>
-        </div>
+
+      <div class="panel-content" style="margin-top: 24px;">
+        <span class="panel-eyebrow anim-fade-up anim-delay-2">For Property Managers</span>
+        <h1 class="panel-heading anim-fade-up anim-delay-3">A platform for<br><em>property management</em></h1>
+        <p class="panel-sub anim-fade-up anim-delay-4">Power your business end to end.</p>
+        <span class="cta cta-outline anim-fade-up anim-delay-5">
+          Learn More
+          <span class="cta-arrow">→</span>
+        </span>
       </div>
-      <div class="phone-card-lg"></div>
-      <div class="phone-card-sm"></div>
-      <div class="phone-nav">
-        <div class="phone-nav-dot active"></div>
-        <div class="phone-nav-dot"></div>
-        <div class="phone-nav-dot"></div>
-        <div class="phone-nav-dot"></div>
+      <div class="panel-tagline anim-fade-up anim-delay-5">Everything for your business.</div>
+    </div>
+
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 2: PLATFORM
+     ═══════════════════════════════════════ -->
+<div id="page-platform">
+
+  <section class="platform-hero">
+    <button class="back-link" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      For Buyers / Sellers
+    </button>
+
+    <div class="hero-rings">
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+    </div>
+
+    <span class="hero-label hl-1">Property Management</span>
+    <span class="hero-label hl-2">Home Services</span>
+    <span class="hero-label hl-3">MLS</span>
+
+    <div class="hero-phone">
+      <div class="phone-inner">
+        <div class="phone-brand">Thornberry</div>
+        <div class="phone-row">
+          <div class="phone-tile"><div class="phone-tile-icon"></div><span class="phone-tile-text">News</span></div>
+          <div class="phone-tile"><div class="phone-tile-icon"></div><span class="phone-tile-text">Our Place</span></div>
+        </div>
+        <div class="phone-row">
+          <div class="phone-tile"><div class="phone-tile-icon"></div><span class="phone-tile-text">Academy</span></div>
+          <div class="phone-tile"><div class="phone-tile-icon"></div><span class="phone-tile-text">Store</span></div>
+        </div>
+        <div class="phone-card-lg"></div>
+        <div class="phone-card-sm"></div>
+        <div class="phone-nav">
+          <div class="phone-nav-dot active"></div>
+          <div class="phone-nav-dot"></div>
+          <div class="phone-nav-dot"></div>
+          <div class="phone-nav-dot"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="hero-text">
-    <h1 class="hero-heading">A platform for<br><em>teams</em></h1>
-  </div>
-</section>
+    <h1 class="hero-heading-p">A platform for<br><em>teams</em></h1>
+  </section>
 
-<!-- SOLUTIONS -->
-<section class="solutions">
-  <h2 class="solutions-heading">Our Solutions</h2>
+  <!-- SOLUTIONS -->
+  <section class="solutions">
+    <h2 class="solutions-heading">Our Solutions</h2>
+    <div class="circles-grid">
 
-  <div class="circles-grid">
+      <a href="#" class="solution-circle">
+        <div class="circle-default"><h3>Property<br>Management</h3></div>
+        <div class="circle-hover-content">
+          <svg class="key-icon" viewBox="0 0 80 40"><circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/></svg>
+          <p>Sustainable growth and exceptional service.</p>
+          <span class="circle-arrow">Learn More →</span>
+        </div>
+      </a>
 
-    <!-- 1: Agents & Teams -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>Agents<br>& Teams</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>Increase production and income faster and for less.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
+      <a href="#" class="solution-circle">
+        <div class="circle-default"><h3>Home<br>Services</h3></div>
+        <div class="circle-hover-content">
+          <svg class="key-icon" viewBox="0 0 80 40"><circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/></svg>
+          <p>Turnkey way to elevate your clients move-in journey.</p>
+          <span class="circle-arrow">Learn More →</span>
+        </div>
+      </a>
 
-    <!-- 2: Brokerages -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>Brokerages</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>Create stronger teams and a healthier ecosystem.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
+      <a href="#" class="solution-circle">
+        <div class="circle-default"><h3>MLS</h3></div>
+        <div class="circle-hover-content">
+          <svg class="key-icon" viewBox="0 0 80 40"><circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/><line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/></svg>
+          <p>For MLSs committed to strengthening member value.</p>
+          <span class="circle-arrow">Learn More →</span>
+        </div>
+      </a>
 
-    <!-- 3: Mortgage -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>Mortgage</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>For lending professionals ready to scale with purpose.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
+    </div>
+  </section>
 
-    <!-- 4: Title & Escrow -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>Title &<br>Escrow</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>Systems that help title & escrow pros win every transaction.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
+  <footer>
+    <p>&copy; 2026 Thornberry. All rights reserved. &nbsp;|&nbsp; <a href="#">Privacy</a> &nbsp;|&nbsp; <a href="#">Terms</a></p>
+  </footer>
+</div>
 
-    <!-- 5: Property Management -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>Property<br>Management</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>Sustainable growth and exceptional service.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
 
-    <!-- 6: Home Services -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>Home<br>Services</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>Turnkey way to elevate your clients move-in journey.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
+<script>
+  function goToPlatform() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.getElementById('page-split').classList.add('hide');
+    document.getElementById('navSplit').classList.add('hide');
+    setTimeout(() => {
+      document.getElementById('page-platform').classList.add('show');
+      document.getElementById('navPlatform').classList.add('show');
+    }, 100);
+  }
 
-    <!-- 7: MLS -->
-    <a href="#" class="solution-circle">
-      <div class="circle-default">
-        <h3>MLS</h3>
-      </div>
-      <div class="circle-hover-content">
-        <svg class="key-icon" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="20" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="24" y1="20" x2="70" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="55" y1="20" x2="55" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="63" y1="20" x2="63" y2="14" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-          <line x1="70" y1="20" x2="70" y2="12" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
-        </svg>
-        <p>For MLSs committed to strengthening member value.</p>
-        <span class="circle-arrow">Learn More →</span>
-      </div>
-    </a>
-
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <p>&copy; 2026 Thornberry. All rights reserved. &nbsp;|&nbsp; <a href="#">Privacy</a> &nbsp;|&nbsp; <a href="#">Terms</a></p>
-</footer>
+  function goBack() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.getElementById('page-platform').classList.remove('show');
+    document.getElementById('navPlatform').classList.remove('show');
+    setTimeout(() => {
+      document.getElementById('page-split').classList.remove('hide');
+      document.getElementById('navSplit').classList.remove('hide');
+    }, 400);
+  }
+</script>
 
 </body>
 </html>
